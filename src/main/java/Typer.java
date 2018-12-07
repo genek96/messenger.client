@@ -11,16 +11,20 @@ public class Typer implements Runnable{
 
     Typer (NetSender net){
         sender = net;
+        log.info("Typer is created");
     }
 
     @Override
     public void run() {
+        log.info("Typer run");
+
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
                         System.in, StandardCharsets.UTF_8))){
-            String line;
-
+            String line = "";
+            log.info("Before while");
             while ((line = reader.readLine()) != null && !line.equals("/stop") && !Thread.currentThread().isInterrupted()){
+                log.info("Row was reade");
                 if (sender.sendMessage(line)){
                     System.out.println("delivered");
                 } else {

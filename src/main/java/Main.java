@@ -14,17 +14,14 @@ public class Main {
         NetSender sender = null;
         NetReciver reciver = null;
         Printer printer = new Printer();
+        Authorization authorization = new Authorization();
         try{
-            connector = new NetConnector("localhost", 12345);
+            connector = new NetConnector("localhost", 12345, authorization.login());
             log.info("Successful connected to server!");
-        } catch (IOException ex){
-            log.error(ex.getMessage() + " : " + Arrays.toString(ex.getStackTrace()));
-            return;
-        }
-        try {
+            System.out.println("Successful connected to server!");
             sender = new NetSender(connector.getOutputStream());
             reciver = new NetReciver(connector.getInputStream(), printer);
-        } catch (IOException ex) {
+        } catch (IOException ex){
             log.error(ex.getMessage() + " : " + Arrays.toString(ex.getStackTrace()));
             return;
         }
@@ -36,6 +33,13 @@ public class Main {
         inputThread.start();
         outputThread.start();
 
+        try {
+            inputThread.join();
+        } catch (InterruptedException e) {
+            log.error(e.getMessage()+" : "+ Arrays.toString(e.getStackTrace()));
+        }
+        outputThread.interrupt();
+        System.out.println("Connection closed");
     }
 
     void testClassLoader(){

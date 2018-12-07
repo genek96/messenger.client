@@ -1,3 +1,4 @@
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -7,16 +8,21 @@ public class NetConnector {
 
     private Socket socket;
 
-    public NetConnector(String host, int port) throws IOException {
+    NetConnector(String host, int port, String login) throws IOException {
         socket = new Socket(host, port);
         socket.setSoTimeout(0);
+        //sending login
+        DataOutputStream output = new DataOutputStream(socket.getOutputStream());
+        output.writeUTF(login);
+//        output.close();
+
     }
 
-    public InputStream getInputStream() throws IOException{
+    InputStream getInputStream() throws IOException{
         return socket.getInputStream();
     }
 
-    public OutputStream getOutputStream() throws IOException{
+    OutputStream getOutputStream() throws IOException{
         return socket.getOutputStream();
     }
 }
