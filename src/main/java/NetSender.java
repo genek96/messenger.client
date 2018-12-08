@@ -17,7 +17,7 @@ class NetSender {
         try {
             output.writeUTF(message);
             return true;
-        }catch (IOException ex){
+        }catch (IOException | NullPointerException ex){
             log.error(ex.getMessage()+" : "+ Arrays.toString(ex.getStackTrace()));
             return false;
         }

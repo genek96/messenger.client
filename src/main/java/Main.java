@@ -10,15 +10,15 @@ public class Main {
     private static final Logger log = Logger.getLogger(Main.class);
 
     public static void main (String[] args){
-        NetConnector connector = null;
+
         NetSender sender = null;
         NetReciver reciver = null;
         Printer printer = new Printer();
         Authorization authorization = new Authorization();
+        NetConnector connector = new NetConnector("localhost", 12345, authorization.login());
+        log.info("Successful connected to server!");
+        System.out.println("You are joined the chat!");
         try{
-            connector = new NetConnector("localhost", 12345, authorization.login());
-            log.info("Successful connected to server!");
-            System.out.println("Successful connected to server!");
             sender = new NetSender(connector.getOutputStream());
             reciver = new NetReciver(connector.getInputStream(), printer);
         } catch (IOException ex){

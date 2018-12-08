@@ -13,7 +13,7 @@ public class NetReciver implements Runnable{
     private DataInputStream reader;
     private Printer printer;
 
-    public NetReciver (InputStream input, Printer printerOut){
+    NetReciver(InputStream input, Printer printerOut){
         reader = new DataInputStream(input);
         printer = printerOut;
     }
