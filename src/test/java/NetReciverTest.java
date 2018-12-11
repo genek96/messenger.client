@@ -22,7 +22,7 @@ public class NetReciverTest {
         reciver = new NetReciver(input, printer);
     }
 
-    @Ignore
+    @Ignore //TODO think, how to solve this test
     @Test (timeout = 250)
     public void testRun(){
         Thread testThread = new Thread(reciver);
