@@ -4,11 +4,20 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
+/**
+ * This class should be started in the different thread.
+ * It is waiting messages from the user and sending them to the server.
+ */
 public class Typer implements Runnable{
 
     private static final Logger log = Logger.getLogger(Typer.class);
     private NetSender sender;
 
+    /**
+     *
+     * @param net
+     *        Class, which send messages to the server
+     */
     Typer (NetSender net){
         sender = net;
         log.info("Typer is created");

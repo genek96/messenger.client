@@ -5,12 +5,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
-public class Authorization {
+/**
+ * This class is required for authorizing.
+ */
+class Authorization {
 
     private static final Logger log = Logger.getLogger(Authorization.class);
 
     private String login = "";
 
+    /**
+     *
+     * @return string with login, derived from system input
+     */
     String login(){
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         login = "1";

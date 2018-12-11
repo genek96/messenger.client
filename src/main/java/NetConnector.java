@@ -12,6 +12,15 @@ public class NetConnector {
     private static final Logger log = Logger.getLogger(NetConnector.class);
     private Socket socket;
 
+    /**
+     * Create a socket for connecting to the server
+     * @param host
+     *        IP or DNS address of the server
+     * @param port
+     *        Port for connecting to server
+     * @param login
+     *        Name, which will see everybody
+     */
     NetConnector(String host, int port, String login) {
         try {
             socket = new Socket(host, port);
@@ -29,10 +38,20 @@ public class NetConnector {
 
     }
 
+    /**
+     *
+     * @return input stream from a socket
+     * @throws IOException if stream was closed or didn't opened
+     */
     InputStream getInputStream() throws IOException{
         return socket.getInputStream();
     }
 
+    /**
+     *
+     * @return output stream from a socket
+     * @throws IOException if stream was closed or didn't opened
+     */
     OutputStream getOutputStream() throws IOException{
         return socket.getOutputStream();
     }
