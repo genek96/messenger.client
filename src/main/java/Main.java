@@ -1,8 +1,10 @@
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
+import java.util.Properties;
 
+import jdk.internal.loader.Loader;
 import org.apache.log4j.Logger;
 
 public class Main {
@@ -10,23 +12,39 @@ public class Main {
     private static final Logger log = Logger.getLogger(Main.class);
 
     public static void main (String[] args){
+        final int port;
+        final String host;
+        //Initialization of properties
+        Properties properties = new Properties();
+        try{
+            properties.load((new URL(Loader.getSystemResource("config.properties").getFile())).openStream());
+        } catch (MalformedURLException e){
+            log.error("Can not find config file! "+e.getMessage()+" : "+ Arrays.toString(e.getStackTrace()));
+            return;
+        } catch (IOException e) {
+            log.error("Can not open config file!" + e.getMessage() + " : "+ Arrays.toString(e.getStackTrace()));
+        }
+        port = Integer.parseInt(properties.getProperty("port"));
+        host = properties.getProperty("host");
 
         NetSender sender = null;
-        NetReciver reciver = null;
+        NetReceiver reciver = null;
         Printer printer = new Printer();
         Authorization authorization = new Authorization();
-        NetConnector connector = new NetConnector("localhost", 12345, authorization.login());
+        NetConnector connector = new NetConnector(host, port, authorization.login());
+
         log.info("Successful connected to server!");
         System.out.println("You are joined the chat!");
+
         try{
             sender = new NetSender(connector.getOutputStream());
-            reciver = new NetReciver(connector.getInputStream(), printer);
+            reciver = new NetReceiver(connector.getInputStream(), printer);
         } catch (IOException ex){
             log.error(ex.getMessage() + " : " + Arrays.toString(ex.getStackTrace()));
             return;
         }
-        Typer typer = new Typer(sender);
 
+        Typer typer = new Typer(sender);
         Thread outputThread = new Thread(typer);
         Thread inputThread = new Thread (reciver);
 
@@ -40,25 +58,5 @@ public class Main {
         }
         outputThread.interrupt();
         System.out.println("Connection closed");
-    }
-
-    void testClassLoader(){
-        try {
-            Class a = Class.forName("factorial", false, this.getClass().getClassLoader());
-            Object b = a.newInstance();
-            Method[] methods = a.getMethods();
-            a.getMethod("count");
-            methods[0].invoke(b);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
     }
 }
